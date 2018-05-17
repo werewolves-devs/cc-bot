@@ -4,17 +4,13 @@ const game_state = require('../game/game_state');
 const user = require('../user/user.js');
 var fs = require('fs')
 
-
-
-function writecc() { //function writes ccconf (odbj) to cc.json
+function writecc() { //function writes ccconf (odj) to cc.json
   fs.writeFile('./cc/cc.json', JSON.stringify(ccconf), {
     encoding: 'utf-8'
   }, function(err) {
     if (err) throw err //throw error
   })
 }
-
-
 
 function createChannel(showCreator, people, client, name, ccconf, msg) { //function to make a channel in a category, and make new category if full
 
@@ -96,7 +92,7 @@ function createChannel(showCreator, people, client, name, ccconf, msg) { //funct
   })
 }
 
-exports.createCmd = function(msg, client, args) { //command for making a cc
+exports.commands.create = function(msg, client, args) { //command for making a cc
   utils.debugMessage("start of create CC")
   msg.delete()
   var name = args[0]; //set var for cc name
@@ -149,7 +145,7 @@ exports.createCmd = function(msg, client, args) { //command for making a cc
   }
 }
 
-exports.listCmd = function(msg, client, args) { //list people in the cc
+exports.commands.list = function(msg, client, args) { //list people in the cc
   if (!msg.channel.name.startsWith(game_state.data().season_code.replace(/[^a-z 0-9 - _]/g, "a") + "-cc-")) {
     msg.reply("you can only do that in a CC");
     return;
@@ -165,7 +161,7 @@ exports.listCmd = function(msg, client, args) { //list people in the cc
   msg.channel.send(people)
 }
 
-exports.addCmd = function(msg, client, args) { //add someone to the cc
+exports.commands.add = function(msg, client, args) { //add someone to the cc
   if (!msg.channel.name.startsWith(game_state.data().season_code.replace(/[^a-z 0-9 - _]/g, "a") + "-cc-")) {
     msg.reply("you can only do that in a CC");
     return;
@@ -208,7 +204,7 @@ exports.addCmd = function(msg, client, args) { //add someone to the cc
 }
 
 
-exports.removeCmd = function(msg, client, args) { //remove someone from the cc
+exports.commands.remove = function(msg, client, args) { //remove someone from the cc
   if (!msg.channel.name.startsWith(game_state.data().season_code.replace(/[^a-z 0-9 - _]/g, "a") + "-cc-")) {
     msg.reply("you can only do that in a CC");
     return;
