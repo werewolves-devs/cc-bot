@@ -1,7 +1,8 @@
-const config = require('../config'); //include main config
-const utils = require('../utils'); //include main config
-const game_state = require('../game/game_state');
-const user = require('../user/user.js');
+// this was written by trebor97351 originally
+
+const config = require('./config'); //include main config
+//const game_state = require('../game/game_state');
+//const user = require('../user/user.js');
 var fs = require('fs')
 
 function writecc() { //function writes ccconf (odj) to cc.json
