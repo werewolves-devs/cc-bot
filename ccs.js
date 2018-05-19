@@ -21,7 +21,7 @@ function createChannel(showCreator, people, client, name, ccconf, msg) { //funct
 
   if (msg.guild.channels.get(ccconf.CC_curent_category_id) == undefined) { //if there is no current catagory
     msg.guild.createChannel(categoryName, "category").then(function(channel) { //make a new category
-      utils.infoMessage(`had to make a new CC category (${categoryName})`) //log creation of new catagory
+      console.log(`had to make a new CC category (${categoryName})`)) //log creation of new catagory
       ccconf.CC_curent_category_id = channel.id //update current category id
       writecc(); //write new channel id and number to cc.json
     })
@@ -34,7 +34,7 @@ function createChannel(showCreator, people, client, name, ccconf, msg) { //funct
         channel.delete() //delete the category
         msg.guild.createChannel(categoryName, "category").then(function(channel) { //make a new category
           ccconf.CC_curent_category_id = channel.id //update current category id
-          utils.infoMessage(`had to make a new CC category (${categoryName})`) //log creation of new catagory
+          console.log(`had to make a new CC category (${categoryName})`)) //log creation of new catagory
           writecc(); //write new channel id and number to cc.json
           createChannel(name, ccconf, msg) //try to make the channel again
         })
@@ -43,25 +43,25 @@ function createChannel(showCreator, people, client, name, ccconf, msg) { //funct
 
     //set perms
   ).then(function(channel) {
-	utils.debugMessage("before bot")
+
     channel.overwritePermissions(client.user.id, { //the bot can see it
       'VIEW_CHANNEL': true
     })
-    utils.debugMessage("added bot")
+
     channel.overwritePermissions(msg.guild.roles.find("name", "@everyone"), { //@everyone can't see it
       'VIEW_CHANNEL': false
     })
-    utils.debugMessage("removed everyone")
+
     channel.overwritePermissions(msg.guild.roles.get(config.role_ids.gameMaster), { //gamemaster can see it
       'VIEW_CHANNEL': true,
       'READ_MESSAGE_HISTORY': true //perm for owner of cc, to add/remove people
     })
-    utils.debugMessage("added GMs")
+
     channel.overwritePermissions(msg.author, { //author can see it
       'VIEW_CHANNEL': true,
       'READ_MESSAGE_HISTORY': true //perm for owner of cc, to add/remove people
     })
-    utils.debugMessage("added author")
+
     channel.overwritePermissions(msg.guild.roles.get(config.role_ids.dead), { //dead peps (LOL HAHA SUCKS TO BE YOU) can't send in it
       SEND_MESSAGES: false
     })
@@ -75,7 +75,7 @@ function createChannel(showCreator, people, client, name, ccconf, msg) { //funct
         })
       })
     })
-    utils.debugMessage("added others")
+
     var peoples = []
     if (showCreator == true) {
       channel.send(config.messages.CC.createNotAnonymous) //send the default message to the channel
@@ -92,16 +92,15 @@ function createChannel(showCreator, people, client, name, ccconf, msg) { //funct
     }
   })
 }
-
-exports.commands.create = function(msg, client, args) { //command for making a cc
-  utils.debugMessage("start of create CC")
+exports.commands={}
+exports.commands.create = function(msg, client, args) {
+  //command for making a cc
   msg.delete()
   var name = args[0]; //set var for cc name
   var showCreator = true; //default for showing the creator
 
-
   //check what the arguments are, and doing error handling
-  var syntax = "```" + config.bot_prefix + "c create <name> [show creator (True or False [default True])] <person1> [person2]...```"; //define the syntax to be displayed
+  var syntax = "```" + config.prefix + "c create <name> [show creator (True or False [default True])] <person1> [person2]...```"; //define the syntax to be displayed
 
   //check if valid arguments
   if (args.length == 0) {
